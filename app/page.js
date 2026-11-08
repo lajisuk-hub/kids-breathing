@@ -81,7 +81,10 @@ export default function Home() {
           </button>
         ))}
       </section>
-      <footer className="foot">영상마다 약 1분 40초 · 소리를 켜고 함께 따라 해요</footer>
+      <footer className="foot">
+        영상마다 약 1분 40초 · 소리를 켜고 함께 따라 해요
+        <span className="copy">ⓒ 영유아교육디자인연구소 제작 · 무단 배포 금지</span>
+      </footer>
     </main>
   );
 }
