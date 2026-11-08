@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1280px;height:720px;overflow:hidden;background:#000}
+#stage{position:relative;width:1280px;height:720px;overflow:hidden;font-family:'Gowun Dodum',sans-serif}
+#bg{position:absolute;inset:0}
+canvas{position:absolute;inset:0}
+#glow{position:absolute;left:640px;top:330px;width:520px;height:520px;margin:-260px 0 0 -260px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,255,255,.35),rgba(255,255,255,0) 65%)}
+#charWrap{position:absolute;left:640px;top:330px;width:0;height:0}
+#char{position:absolute;width:560px;height:560px;left:-280px;top:-280px;object-fit:contain}
+#num{position:absolute;left:1060px;top:250px;width:150px;height:150px;margin-left:-75px;border-radius:50%;
+  background:rgba(255,255,255,.92);color:#3b2f7a;font-family:'Jua';font-size:100px;line-height:156px;text-align:center;
+  box-shadow:0 6px 24px rgba(0,0,0,.25);opacity:0}
+#cap{position:absolute;left:50%;transform:translateX(-50%);bottom:40px;white-space:nowrap;text-align:center;color:#fff;font-size:40px;font-weight:700;
+  text-shadow:0 2px 6px rgba(0,0,0,.5);padding:10px 34px;line-height:1.35;border-radius:40px;background:rgba(20,18,60,.55)}
+#cap:empty{display:none}
+#cap b{color:#ffd84d}
+#tag{position:absolute;right:46px;top:30px;font-family:'Jua';font-size:64px;color:#9fd8ff;opacity:0;
+  text-shadow:0 3px 12px rgba(0,0,0,.4)}
+#phase{position:absolute;left:46px;top:34px;display:flex;gap:10px;opacity:0}
+#phase span{font-family:'Jua';font-size:30px;padding:6px 18px;border-radius:30px;background:rgba(255,255,255,.18);color:rgba(255,255,255,.75)}
+#phase span.on{background:#ffd84d !important;color:#3b2f7a !important}
+#title{position:absolute;left:0;right:0;top:250px;height:220px;background:rgba(70,55,140,.82);text-align:center;opacity:0}
+#title .s{color:#fff;font-size:34px;margin-top:34px}
+#title .t{font-family:'Jua';font-size:96px;color:#ffd84d;margin-top:8px}
+</style></head>
+<body><div id="stage">
+<div id="bg"></div>
+<canvas id="deco" width="1280" height="720"></canvas>
+<div id="glow"></div>
+<div id="charWrap"><img id="char"></div>
+<div id="num"></div>
+<canvas id="fx" width="1280" height="720"></canvas>
+<div id="phase"><span>들이쉬기</span><span>멈추기</span><span>내쉬기</span></div>
+<div id="tag"></div>
+<div id="cap"></div>
+<div id="title"><div class="s">불안과 긴장을 풀어 주는 호흡 연습</div><div class="t"></div></div>
+</div>
+<script>document.write('<script src="data_'+(new URLSearchParams(location.search).get('k')||'star')+'.js"><\/script>')</script>
+<script>
+// data.js : window.DATA = {key, title, theme, frames:N, fps, ev, size, cnt, tag, fireworks, total}
+const D = window.DATA, $ = id => document.getElementById(id);
+window.TOTAL = D.total;
+const THEMES = {
+  night:  'radial-gradient(ellipse at 50% 30%, #3b3a8f 0%, #1d1b55 45%, #0b0a26 100%)',
+  sky:    'linear-gradient(180deg, #7fc4f5 0%, #b9e2fb 55%, #e9f7ff 100%)',
+  garden: 'linear-gradient(180deg, #bfe8ff 0%, #e6f6ff 45%, #dff3c8 72%, #9fd77e 100%)',
+};
+$('bg').style.background = THEMES[D.theme];
+$('title').querySelector('.t').textContent = D.title;
+if (D.theme !== 'night') { $('cap').style.background = 'rgba(20,60,110,.62)'; document.querySelectorAll('#phase span').forEach(s=>{s.style.background='rgba(20,60,110,.45)'; s.style.color='rgba(255,255,255,.9)'}); }
+
+// 캐릭터 프레임 미리 받아 두기
+const imgs = [];
+for (let i = 0; i < D.frames; i++) { const im = new Image(); im.src = `frames/${D.key}/f${String(i).padStart(3,'0')}.png`; imgs.push(im); }
+window.READY = () => Promise.all(imgs.map(im => im.decode().catch(()=>0))).then(()=>document.fonts.ready).then(()=>1);
+
+// 결정적 난수
+function rnd(i){ const x = Math.sin(i*127.1+311.7)*43758.5453; return x - Math.floor(x); }
+const ease = x => x<=0?0:x>=1?1:0.5-0.5*Math.cos(Math.PI*x);
+
+function sizeAt(t){
+  let s = 0;
+  for (const [a,b,f,g] of D.size){ if (t>=b) s=g; else if (t>=a) s = f+(g-f)*ease((t-a)/(b-a)); }
+  return s;
+}
+function drawDeco(t){
+  const c = $('deco').getContext('2d'); c.clearRect(0,0,1280,720);
+  if (D.theme==='night'){
+    for (let i=0;i<120;i++){ const x=rnd(i)*1280, y=rnd(i+500)*720, r=rnd(i+900)*1.8+0.4;
+      const a = 0.35+0.65*Math.abs(Math.sin(t*(0.6+rnd(i+77)*1.4)+i));
+      c.fillStyle=`rgba(255,255,240,${a})`; c.beginPath(); c.arc(x,y,r,0,7); c.fill(); }
+    // 큰 반짝 별 몇 개
+    for (let i=0;i<5;i++){ const x=rnd(i+40)*1280, y=rnd(i+60)*680, a=Math.max(0,Math.sin(t*0.8+i*1.7));
+      const g=c.createRadialGradient(x,y,0,x,y,18); g.addColorStop(0,`rgba(255,255,255,${a})`); g.addColorStop(1,'rgba(255,255,255,0)');
+      c.fillStyle=g; c.beginPath(); c.arc(x,y,18,0,7); c.fill(); }
+  } else {
+    const n = D.theme==='garden'?4:7;
+    for (let i=0;i<n;i++){ const sp=6+rnd(i)*10, y=40+rnd(i+20)*(D.theme==='garden'?220:560), w=120+rnd(i+30)*160;
+      const x = ((rnd(i+10)*1600 + t*sp) % 1600) - 200;
+      c.fillStyle='rgba(255,255,255,0.75)';
+      c.beginPath(); c.ellipse(x,y,w*0.5,w*0.18,0,0,7); c.ellipse(x-w*0.18,y-w*0.08,w*0.22,w*0.17,0,0,7); c.ellipse(x+w*0.12,y-w*0.12,w*0.26,w*0.2,0,0,7); c.fill(); }
+    if (D.theme==='garden'){
+      for (let i=0;i<26;i++){ const x=rnd(i+200)*1280, y=600+rnd(i+300)*110, sw=Math.sin(t*1.2+i)*4;
+        c.fillStyle=['#ff9fc4','#fff07a','#ffffff','#ffb3e0','#c9a8ff'][i%5];
+        for(let p=0;p<5;p++){ const an=p/5*6.283; c.beginPath(); c.arc(x+sw+Math.cos(an)*7,y+Math.sin(an)*7,6,0,7); c.fill(); }
+        c.fillStyle='#ffcf3d'; c.beginPath(); c.arc(x+sw,y,5,0,7); c.fill(); }
+    }
+  }
+}
+function drawFx(t){
+  const c = $('fx').getContext('2d'); c.clearRect(0,0,1280,720);
+  const t0 = D.fireworks; if (t < t0) return;
+  const bursts = [[640,150,0],[330,300,0.5],[950,300,0.9],[470,120,1.6],[820,140,2.0],[640,250,2.6],[300,180,3.2],[980,200,3.6]];
+  bursts.forEach(([bx,by,d],bi)=>{
+    const lt = t - t0 - d; if (lt<0 || lt>1.8) return;
+    const col = ['#ffd84d','#ff8fc8','#8fe3ff','#b8ff8f','#ffb070'][bi%5];
+    const R = 120*ease(Math.min(1,lt/0.9)), a = lt<1 ? 1 : 1-(lt-1)/0.8;
+    c.strokeStyle = col; c.globalAlpha = Math.max(0,a); c.lineWidth = 3;
+    for (let k=0;k<18;k++){ const an=k/18*6.283;
+      c.beginPath(); c.moveTo(bx+Math.cos(an)*R*0.45,by+Math.sin(an)*R*0.45); c.lineTo(bx+Math.cos(an)*R,by+Math.sin(an)*R+lt*12); c.stroke(); }
+    c.globalAlpha=1;
+  });
+}
+function capAt(t){
+  let cur = null;
+  for (const e of D.ev){ if (e.cap===null || e.cap===undefined) continue; if (e.t<=t) cur=e; }
+  if (!cur) return '';
+  // 문장이 끝나고 오래 지나면 지움(사이 구간)
+  return cur.cap;
+}
+function phaseAt(t){
+  for (const [a,b,f,g] of D.size){ if (t>=a && t<b && D.cycleStarts.some(c=>Math.abs(c-a)<0.01||Math.abs(c+D.IN+D.HOLD-a)<0.01)) return g>f?0:2; }
+  for (const c of D.cycleStarts){ if (t>=c+D.IN && t<c+D.IN+D.HOLD) return 1; }
+  return -1;
+}
+
+window.seek = function(t){
+  drawDeco(t);
+  // 제목 카드
+  const tt = t<0.3?t/0.3:(t>4.4?Math.max(0,1-(t-4.4)/0.6):1);
+  $('title').style.opacity = t<5 ? tt : 0;
+  // 캐릭터
+  const s = sizeAt(t), sc = 0.48 + 0.52*s;
+  const fi = Math.floor(t*D.fps) % D.frames;
+  const im = imgs[fi]; if (im && $('char').src !== im.src) $('char').src = im.src;
+  const bob = Math.sin(t*1.3)*4;
+  $('charWrap').style.transform = `translateY(${bob}px) scale(${sc})`;
+  $('charWrap').style.opacity = t<4.6 ? 0.25 : Math.min(1,(t-4.6)/0.6+0.25);
+  $('glow').style.transform = `scale(${0.6+0.6*s})`; $('glow').style.opacity = 0.35+0.5*s;
+  // 숫자
+  let n = 0; for (const [a,v] of D.cnt){ if (a<=t) n=v; }
+  const nb = $('num'); nb.style.opacity = n ? 1 : 0; if (n) nb.textContent = n;
+  let lastC = 0; for (const [a] of D.cnt){ if (a<=t) lastC=a; }
+  const pop = Math.max(0, 1 - (t-lastC)/0.25); nb.style.transform = `scale(${1+0.18*pop})`;
+  // 단계 표시
+  const ph = phaseAt(t); const P = $('phase'); P.style.opacity = ph>=0 ? 1 : 0;
+  [...P.children].forEach((e,i)=>e.classList.toggle('on', i===ph));
+  // 자막
+  $('cap').textContent = t<5 ? '' : capAt(t);
+  // 마지막 표시
+  let tg=''; for (const [a,b,g] of D.tag){ if (t>=a && t<b) tg=g; } $('tag').textContent=tg; $('tag').style.opacity = tg?1:0;
+  drawFx(t);
+  // 끝 페이드
+  $('stage').style.opacity = t > D.total-1 ? Math.max(0, D.total - t) : 1;
+};
+if (!location.search.includes('render')) {
+  const st = performance.now(); window.READY().then(()=>{ (function loop(){ seek(((performance.now()-st)/1000) % D.total); requestAnimationFrame(loop); })(); });
+}
+</script></body></html>

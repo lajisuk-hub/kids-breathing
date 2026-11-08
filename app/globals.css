@@ -1,0 +1,56 @@
+:root{
+  --ink:#fff; --sky1:#1c1a52; --sky2:#3b3a8f;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%}
+body{font-family:'Gowun Dodum',sans-serif;color:var(--ink);
+  background:radial-gradient(ellipse at 50% 0%, #4a48a8 0%, #2a2873 45%, #12113a 100%) fixed;}
+button{font-family:inherit;cursor:pointer;border:0}
+
+/* 첫 화면 */
+.home{position:relative;max-width:1080px;margin:0 auto;padding:40px 16px 48px;overflow:hidden}
+.stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+.stars i{position:absolute;border-radius:50%;background:#fffbe6;animation:tw 3s ease-in-out infinite alternate}
+@keyframes tw{from{opacity:.2}to{opacity:1}}
+.hero{position:relative;z-index:1;text-align:center;margin-bottom:28px}
+.kicker{font-size:17px;opacity:.85}
+.hero h1{font-family:'Jua';font-size:clamp(44px,9vw,76px);color:#ffd84d;margin:6px 0 10px;
+  text-shadow:0 4px 18px rgba(0,0,0,.35)}
+.lead{font-size:clamp(17px,3.6vw,21px);line-height:1.6}
+.lead b{color:#ffe98a}
+.grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media (max-width:720px){.grid{grid-template-columns:repeat(2,1fr);gap:12px}}
+.card{display:flex;flex-direction:column;align-items:center;padding:18px 10px 16px;border-radius:26px;
+  background:linear-gradient(160deg, color-mix(in srgb,var(--bg) 85%, #fff) 0%, var(--bg) 100%);
+  box-shadow:0 10px 26px rgba(0,0,0,.28), inset 0 0 0 3px rgba(255,255,255,.12);
+  color:#fff;transition:transform .2s}
+.card:hover,.card:focus-visible{transform:translateY(-4px)}
+.card:active{transform:scale(.97)}
+.card img{width:min(170px,70%);aspect-ratio:1;object-fit:contain;animation:breathe 7s ease-in-out infinite;
+  filter:drop-shadow(0 8px 14px rgba(0,0,0,.25))}
+@keyframes breathe{0%,100%{transform:scale(.82)}40%,55%{transform:scale(1.05)}}
+.card .name{font-family:'Jua';font-size:clamp(28px,5vw,38px);margin-top:6px;color:var(--accent);
+  text-shadow:0 2px 8px rgba(0,0,0,.35)}
+.card .sub{font-size:15px;opacity:.9;margin-top:2px}
+.foot{position:relative;z-index:1;text-align:center;margin-top:28px;font-size:15px;opacity:.75}
+
+/* 영상 보기 화면 */
+.watch{max-width:1000px;margin:0 auto;padding:18px 16px 40px}
+.watchTop{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.back{background:rgba(255,255,255,.14);color:#fff;font-size:17px;padding:10px 16px;border-radius:999px}
+.back:hover{background:rgba(255,255,255,.24)}
+.watchTitle{display:flex;align-items:center;gap:8px;font-family:'Jua';font-size:clamp(26px,5vw,36px);color:var(--accent)}
+.watchTitle img{width:48px;height:48px;object-fit:contain}
+.player{border-radius:20px;overflow:hidden;background:#000;box-shadow:0 14px 36px rgba(0,0,0,.4);aspect-ratio:16/9}
+.player video{width:100%;height:100%;display:block;background:#000}
+.watchBtns{display:flex;justify-content:center;margin:16px 0 6px}
+.big{background:var(--accent);color:#2b2a5c;font-family:'Jua';font-size:22px;padding:12px 28px;border-radius:999px;
+  box-shadow:0 6px 16px rgba(0,0,0,.3)}
+.how{text-align:center;font-size:clamp(16px,3.4vw,19px);line-height:1.6;margin:10px 0 22px;opacity:.95}
+.how b{color:#ffe98a}
+.others{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+@media (max-width:600px){.others{grid-template-columns:repeat(3,1fr)}}
+.mini{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border-radius:16px;
+  background:rgba(255,255,255,.1);color:#fff;font-family:'Jua';font-size:18px}
+.mini:hover{background:rgba(255,255,255,.2)}
+.mini img{width:56px;height:56px;object-fit:contain}

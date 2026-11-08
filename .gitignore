@@ -1,0 +1,15 @@
+node_modules
+.next
+.env*
+.vercel
+work/frames
+work/tmp_*
+work/out
+work/flow_out
+work/flow_in
+work/shots
+work/voice
+work/chars
+work/*.wav
+work/*.log
+work/*.jpg

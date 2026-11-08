@@ -1,0 +1,35 @@
+{
+ "version": 1,
+ "jobs": [
+  {
+   "id": "star",
+   "prompt": "A plump five-pointed golden yellow star character with a happy face. Cute 3D kawaii cartoon character for a preschool breathing exercise, soft rounded Pixar-like clay style, big shiny friendly eyes, small gentle smile, rosy cheeks, soft studio lighting. The character is centered, whole body fully visible, occupying about 55% of the frame with generous empty margin on all sides. Background is a perfectly flat solid pure chroma-key green (#00FF00) with no gradient, no floor, no shadow, no other objects, no text.",
+   "out": "chars/star.png"
+  },
+  {
+   "id": "moon",
+   "prompt": "A pale butter-yellow crescent moon character with a sleepy sweet face and a tiny nightcap-free look. Cute 3D kawaii cartoon character for a preschool breathing exercise, soft rounded Pixar-like clay style, big shiny friendly eyes, small gentle smile, rosy cheeks, soft studio lighting. The character is centered, whole body fully visible, occupying about 55% of the frame with generous empty margin on all sides. Background is a perfectly flat solid pure chroma-key green (#00FF00) with no gradient, no floor, no shadow, no other objects, no text.",
+   "out": "chars/moon.png"
+  },
+  {
+   "id": "plane",
+   "prompt": "A small chubby toy airplane character, white and sky-blue with a red propeller, with a happy face on its nose. Cute 3D kawaii cartoon character for a preschool breathing exercise, soft rounded Pixar-like clay style, big shiny friendly eyes, small gentle smile, rosy cheeks, soft studio lighting. The character is centered, whole body fully visible, occupying about 55% of the frame with generous empty margin on all sides. Background is a perfectly flat solid pure chroma-key green (#00FF00) with no gradient, no floor, no shadow, no other objects, no text.",
+   "out": "chars/plane.png"
+  },
+  {
+   "id": "balloon",
+   "prompt": "A round glossy pink balloon character with a happy face and a short curly string hanging below. Cute 3D kawaii cartoon character for a preschool breathing exercise, soft rounded Pixar-like clay style, big shiny friendly eyes, small gentle smile, rosy cheeks, soft studio lighting. The character is centered, whole body fully visible, occupying about 55% of the frame with generous empty margin on all sides. Background is a perfectly flat solid pure chroma-key green (#00FF00) with no gradient, no floor, no shadow, no other objects, no text.",
+   "out": "chars/balloon.png"
+  },
+  {
+   "id": "flower",
+   "prompt": "A cheerful flower character with pink petals around a smiling yellow face, a short green stem and two leaves. Cute 3D kawaii cartoon character for a preschool breathing exercise, soft rounded Pixar-like clay style, big shiny friendly eyes, small gentle smile, rosy cheeks, soft studio lighting. The character is centered, whole body fully visible, occupying about 55% of the frame with generous empty margin on all sides. Background is a perfectly flat solid pure chroma-key green (#00FF00) with no gradient, no floor, no shadow, no other objects, no text.",
+   "out": "chars/flower.png"
+  },
+  {
+   "id": "cloud",
+   "prompt": "A fluffy soft white cloud character with a happy face and light blue shading. Cute 3D kawaii cartoon character for a preschool breathing exercise, soft rounded Pixar-like clay style, big shiny friendly eyes, small gentle smile, rosy cheeks, soft studio lighting. The character is centered, whole body fully visible, occupying about 55% of the frame with generous empty margin on all sides. Background is a perfectly flat solid pure chroma-key green (#00FF00) with no gradient, no floor, no shadow, no other objects, no text.",
+   "out": "chars/cloud.png"
+  }
+ ]
+}
