@@ -69,7 +69,7 @@ export default function Home() {
       <header className="hero">
         <p className="kicker">마음이 차분해지는 어린이 호흡 놀이</p>
         <h1>숨쉬기 친구들</h1>
-        <p className="lead">함께 숨 쉴 친구를 골라 보세요!<br />친구가 <b>커지면 들이쉬고</b>, <b>작아지면 내쉬어요</b>.</p>
+        <p className="lead"><b className="leadMain">캐릭터를 고르고 호흡을 따라서 해봐요!</b><br />친구가 <b>커지면 들이쉬고</b>, <b>작아지면 내쉬어요</b>.</p>
       </header>
       <section className="grid">
         {FRIENDS.map((x, i) => (
